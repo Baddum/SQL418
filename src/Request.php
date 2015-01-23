@@ -1,6 +1,8 @@
 <?php
 
-class SQL418 {
+namespace Elephant418\SQL418;
+
+class Request {
 
 
     /* ATTRIBUTES
