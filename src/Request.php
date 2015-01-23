@@ -1,6 +1,6 @@
 <?php
 
-namespace Elephant418\SQL418;
+namespace Baddum\SQL418;
 
 class Request
 {

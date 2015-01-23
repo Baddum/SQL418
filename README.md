@@ -9,7 +9,7 @@ Let's code
 --------------
 
 ```php
-use Elephant418\SQL418\Request;
+use Baddum\SQL418\Request;
 $sql = (new Request)->init('SELECT * from table ');
 echo $sql->output().PHP_EOL;
 // SELECT * FROM table;
@@ -28,14 +28,14 @@ How to Contribute
 
 ### Get involved
 
-1. [Star](https://github.com/elephant418/model418/stargazers) the project!
-2. [Report a bug](https://github.com/elephant418/model418/issues/new) that you find
-3. Tweet and blog about Model418 and [Let me know](https://twitter.com/iamtzi) about it.
+1. [Star](https://github.com/Baddum/SQL418/stargazers) the project!
+2. [Report a bug](https://github.com/Baddum/SQL418/issues/new) that you find
+3. Tweet and blog about SQL418 and [Let me know](https://twitter.com/iamtzi) about it.
 
 ### Pull Requests
 
 Pull requests are highly appreciated.<br>
-Please review the [guidelines for contributing](https://github.com/Elephant418/Model418/blob/master/CONTRIBUTING.md) to go further.
+Please review the [guidelines for contributing](https://github.com/Baddum/SQL418/blob/master/CONTRIBUTING.md) to go further.
 
 
 
