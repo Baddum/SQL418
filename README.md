@@ -26,16 +26,10 @@ echo $sql->output().PHP_EOL;
 How to Contribute
 --------
 
-### Get involved
-
 1. [Star](https://github.com/Baddum/SQL418/stargazers) the project!
-2. [Report a bug](https://github.com/Baddum/SQL418/issues/new) that you find
-3. Tweet and blog about SQL418 and [Let me know](https://twitter.com/iamtzi) about it.
-
-### Pull Requests
-
-Pull requests are highly appreciated.<br>
-Please review the [guidelines for contributing](https://github.com/Baddum/SQL418/blob/master/CONTRIBUTING.md) to go further.
+2. Tweet and blog about SQL418 and [Let me know](https://twitter.com/iamtzi) about it.
+3. [Report a bug](https://github.com/Baddum/SQL418/issues/new) that you find
+4. Pull requests are highly appreciated. Please review the [guidelines for contributing](https://github.com/Baddum/SQL418/blob/master/CONTRIBUTING.md) to go further.
 
 
 
