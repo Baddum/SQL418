@@ -80,10 +80,3 @@ class Request
         return $optionMap;
     }
 }
-
-$sql = (new SQL418)->init('SELECT * from table ');
-echo $sql->output() . PHP_EOL;
-$sql->extend('WHERE table.id = 39');
-echo $sql->output() . PHP_EOL;
-$sql->extend('SELECT table.name');
-echo $sql->output() . PHP_EOL;

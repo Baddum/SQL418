@@ -1,0 +1,25 @@
+{
+    "name": "baddum/sql418",
+    "type": "library",
+    "description": "A library to extend SQL requests",
+    "keywords": ["sql", "pdo"],
+    "license": "MIT",
+    "homepage": "https://github.com/Baddum/SQL418",
+    "authors": [
+        {
+            "name": "Thomas Zilliox",
+            "email": "hello@tzi.fr",
+            "homepage": "http://tzi.fr"
+
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Baddum\\SQL418\\": "src",
+            "Baddum\\SQL418\\Test\\": "test"
+        }
+    }
+}
