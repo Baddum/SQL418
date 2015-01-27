@@ -23,21 +23,20 @@ Let's code
 ### Basics 
 
 ```php
-$sql = (new Baddum\SQL418\Request);
-$sql->init('SELECT * from table');
-echo $sql->output();
+$sql = new Baddum\SQL418\Request('SELECT * from table');
+echo $sql;
 // SELECT * FROM table;
 
 $sql->extend('WHERE table.id = 39');
-echo $sql->output();
+echo $sql;
 // SELECT * FROM table WHERE table.id = 39;
 
 $sql->extend('SELECT table.column');
-echo $sql->output();
+echo $sql;
 // SELECT table.column FROM table WHERE table.id = 39;
 
 $sql->extend('UPDATE & SET table.column = "coco"');
-echo $sql->output();
+echo $sql;
 // UPDATE table SET table.column = "coco" WHERE table.id = 39;
 ```
 
@@ -48,14 +47,12 @@ In the following example, the `fetchById` and `deleteById` requests share a comm
 
 ```php
 class UserModel {
-  protected function getRequestBase() {
-    return (new Request)->init('SELECT * from user JOIN user_credentials ON user_credentials.id = user.id');
-  }
   protected function getRequestFetchById() {
-    return $this->getRequestBase()->extend('WHERE &( AND) user.id=?');
+    return 'SELECT * from user WHERE user.id=?';
   }
   protected function getRequestDeleteById() {
-    return $this->getRequestFetchById()->extend('DELETE');
+    return new Request($this->getRequestFetchById())
+      ->extend('DELETE');
   }
 }
 ```
@@ -65,11 +62,13 @@ In the following example, we extend the `UserModel` to do a soft delete:
 
 ```php
 class UserModelSoftDelete extends UserModel {
-  protected function getRequestBase() {
-    return parent::getRequestBase()->extend('WHERE user.deleted = 0');
+  protected function getRequestFetchById() {
+    return new Request(parent::getRequestFetchById())
+      ->extend('WHERE & AND user.deleted = 0');
   }
   protected function getRequestDeleteById() {
-    return $this->getRequestFetchById()->extend('UPDATE & SET user.deleted = 1');
+    return new Request($this->getRequestFetchById())
+      ->extend('UPDATE & SET user.deleted = 1');
   }
 }
 ```

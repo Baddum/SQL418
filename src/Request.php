@@ -55,6 +55,10 @@ class Request
 
     /* PUBLIC METHODS
      *************************************************************************/
+    public function __construct($statement) {
+        $this->init($statement);
+    }
+    
     public function init($statement)
     {
         $this->type;
@@ -74,6 +78,10 @@ class Request
             $this->set($keyword, $value);
         }
         return $this;
+    }
+    
+    public function __toString() {
+        return $this->output();
     }
 
     public function output()
