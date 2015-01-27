@@ -49,22 +49,13 @@ In the following example, the `fetchById` and `deleteById` requests share a comm
 ```php
 class UserModel {
   protected function getRequestBase() {
-    return $sql->init('SELECT * from user JOIN user_credentials ON user_credentials.id = user.id');
+    return (new Request)->init('SELECT * from user JOIN user_credentials ON user_credentials.id = user.id');
   }
   protected function getRequestFetchById() {
     return $this->getRequestBase()->extend('WHERE &( AND) user.id=?');
   }
   protected function getRequestDeleteById() {
     return $this->getRequestFetchById()->extend('DELETE &');
-  }
-  
-  public function fetchById($id) {
-    $request = $this->getRequestFetchById();
-    // ...
-  }
-  public function deleteById($id) { 
-    $request = $this->getRequestDeleteById();
-    // ...
   }
 }
 ```
