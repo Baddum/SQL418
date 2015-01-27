@@ -55,8 +55,10 @@ class Request
 
     /* PUBLIC METHODS
      *************************************************************************/
-    public function __construct($statement) {
-        $this->init($statement);
+    public function __construct($statement = null) {
+        if (!is_null($statement)) {
+            $this->init($statement);
+        }
     }
     
     public function init($statement)

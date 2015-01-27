@@ -9,7 +9,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testExtendWithoutParentInheritance()
     {
-        $sql = (new Request)->init('SELECT * from table ');
+        $sql = new Request('SELECT * from table ');
         $this->assertEquals('SELECT * FROM table;', $sql->output());
         $sql->extend('WHERE table.id = 39');
         $this->assertEquals('SELECT * FROM table WHERE table.id = 39;', $sql->output());
@@ -19,7 +19,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testExtend()
     {
-        $sql = (new Request)->init('SELECT table.column from table ');
+        $sql = new Request('SELECT table.column from table ');
         $this->assertEquals('SELECT table.column FROM table;', $sql->output());
         $sql->extend('SELECT & FROM & WHERE table.id = 39');
         $this->assertEquals('SELECT table.column FROM table WHERE table.id = 39;', $sql->output());

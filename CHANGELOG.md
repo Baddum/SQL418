@@ -1,6 +1,12 @@
 CHANGELOG
 ==============
 
+1.1.1:
+--------------
+  
+  * Bugfix on empty constructor.
+  
+
 1.1.0:
 --------------
   
