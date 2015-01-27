@@ -6,7 +6,6 @@ use Baddum\SQL418\Request;
 
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
-    
     public function testFolderWithoutEndingSlash()
     {
         $sql = (new Request)->init('SELECT * from table ');

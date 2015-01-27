@@ -9,74 +9,65 @@ class Request
     /* ATTRIBUTES
      *************************************************************************/
     protected $type;
-    protected $optionMap = array();
+    protected $tokenMap = array();
     protected $keywordMap = array(
-        'SELECT' => array('SELECT', 'FROM', 'WHERE', 'GROUP BY', 'HAVING', 'ORDER BY', 'LIMIT')
+        'SELECT' => ['SELECT', 'FROM', 'WHERE', 'GROUP BY', 'HAVING', 'ORDER BY', 'LIMIT'],
     );
 
 
     /* PUBLIC METHODS
      *************************************************************************/
-    public function init($sql)
+    public function init($statement)
     {
         $this->type;
-        $this->optionMap = array();
-        return $this->extend($sql);
+        $this->tokenMap = array();
+        return $this->extend($statement);
     }
 
-    public function extend($sql)
+    public function extend($statement)
     {
-        $sql = trim(rtrim(trim($sql), ';'));
-        $type = $this->extractType($sql);
+        $statement = trim(rtrim(trim($statement), ';'));
+        $type = $this->extractType($statement);
         if ($type !== false) {
             $this->type = $type;
         }
-        foreach ($this->extractOptionMap($sql) as $keyword => $option) {
-            $this->optionMap[$keyword] = $option;
-        }
+        $this->tokenMap = array_merge($this->tokenMap, $this->extractTokenMap($statement));
         return $this;
     }
 
     public function output()
     {
-        $sql = ' ';
+        $statement = ' ';
         if (!isset($this->keywordMap[$this->type])) {
             throw new \RuntimeException('Try to output an unknown SQL request type: ' . $this->type);
         }
         foreach ($this->keywordMap[$this->type] as $keyword) {
-            if (isset($this->optionMap[$keyword])) {
-                $sql .= ' ' . $keyword . ' ' . $this->optionMap[$keyword];
+            if (isset($this->tokenMap[$keyword])) {
+                $statement .= ' ' . $keyword . ' ' . $this->tokenMap[$keyword];
             }
         }
-        return trim($sql) . ';';
+        return trim($statement) . ';';
     }
 
 
     /* PROTECTED METHODS
      *************************************************************************/
-    protected function extractType($sql)
+    protected function extractType($statement)
     {
         foreach (array_keys($this->keywordMap) as $type) {
-            if (substr($sql, 0, strlen($type) + 1) == $type . ' ') {
+            if (substr($statement, 0, strlen($type) + 1) == $type . ' ') {
                 return $type;
             }
         }
         return false;
     }
 
-    protected function extractOptionMap($sql)
+    protected function extractTokenMap($statement)
     {
-        $keywordPattern = implode('|', $this->keywordMap[$this->type]);
-        $optionMap = array();
-        $matchList = array();
-        $sql .= ' ';
-        do {
-            if ($matchList) {
-                $optionMap[strtoupper($matchList[2])] = trim($matchList[3]);
-                $sql = $matchList[1];
-            }
-            $match = preg_match('/^(.*)(?:(' . $keywordPattern . ') ([^"]*(?:"[^"]*")*[^"]*)) (?:' . $keywordPattern . '|$)/i', $sql, $matchList);
-        } while ($match);
-        return $optionMap;
+        $tokenMap = (new Tokenizer)
+            ->from($statement)
+            ->with($this->keywordMap[$this->type])
+            ->tokenize();
+        return $tokenMap;
     }
 }
