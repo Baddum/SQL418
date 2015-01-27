@@ -65,7 +65,7 @@ class UserModel {
 }
 ```
 
-Most of all, it allows you can to extends your own application.
+Most of all, it allows to extend your own application easily.
 In the following example, we extend the `UserModel` to do a soft delete:
 
 ```php
