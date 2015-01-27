@@ -10,10 +10,17 @@ SQL418
 
 `SQL418` is a PHP library that allows you to modify a SQL requests by extending it.
 
+1. [Let's code](#lets-code)
+2. [How to Install](#how-to-install)
+3. [How to Contribute](#how-to-contribute)
+4. [Author & Community](#author--community)
+
 
 
 Let's code
 --------------
+
+### Basics 
 
 ```php
 $sql = (new Baddum\SQL418\Request);
@@ -35,11 +42,8 @@ echo $sql->output();
 ```
 
 
+### Use case: DRYer requests 
 
-Use cases
---------------
-
-`SQL418` allows to write DRYer SQL requests.
 In the following example, the `fetchById` and `deleteById` requests share a common pattern:
 
 ```php
@@ -58,14 +62,14 @@ class UserModel {
     $request = $this->getRequestFetchById();
     // ...
   }
-  public function deleteById($id) {
+  public function deleteById($id) { 
     $request = $this->getRequestDeleteById();
     // ...
   }
 }
 ```
 
-Most of all, it allows to extend your own application easily.
+### Use case: extensible applications
 In the following example, we extend the `UserModel` to do a soft delete:
 
 ```php
@@ -77,6 +81,17 @@ class UserModelSoftDelete extends UserModel {
     return $this->getRequestFetchById()->extend('UPDATE & SET user.deleted = 1');
   }
 }
+```
+
+
+How to Install
+--------
+
+This library package requires `PHP 5.4` or later.<br>
+Install [Composer](http://getcomposer.org/doc/01-basic-usage.md#installation) and run the following command to get the latest version:
+
+```sh
+composer require baddum/sql418:~1.0
 ```
 
 
