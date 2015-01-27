@@ -15,6 +15,25 @@ class Request
     );
 
 
+    /* GETTER & SETTER METHODS
+     *************************************************************************/
+    public function get($keyword)
+    {
+        if (isset($this->tokenMap[$keyword])) {
+            return $this->tokenMap[$keyword];
+        }
+        return false;
+    }
+    
+    public function set($keyword, $value)
+    {
+        $old = $this->get($keyword);
+        $value = $this->replaceEscapedTag($value, '&', $old);
+        $this->tokenMap[$keyword] = $value;
+        return false;
+    }
+
+
     /* PUBLIC METHODS
      *************************************************************************/
     public function init($statement)
@@ -31,7 +50,10 @@ class Request
         if ($type !== false) {
             $this->type = $type;
         }
-        $this->tokenMap = array_merge($this->tokenMap, $this->extractTokenMap($statement));
+        $tokenMap = $this->extractTokenMap($statement);
+        foreach ($tokenMap as $keyword => $value) {
+            $this->set($keyword, $value);
+        }
         return $this;
     }
 
@@ -69,5 +91,18 @@ class Request
             ->with($this->keywordMap[$this->type])
             ->tokenize();
         return $tokenMap;
+    }
+
+    protected function replaceEscapedTag($subject, $search, $replace)
+    {
+        $subjectPartList = explode('\\\\', $subject);
+        foreach ($subjectPartList as $key => $subjectPart) {
+            $subSubjectPartList = explode('\\'.$search, $subjectPart);
+            foreach ($subSubjectPartList as $subKey => $subSubjectPart) {
+                $subSubjectPartList[$subKey] = str_replace($search, $replace, $subSubjectPart);
+            }
+            $subjectPartList[$key] = implode($search, $subSubjectPartList);
+        }
+        return implode('\\'.$search, $subjectPartList);
     }
 }
