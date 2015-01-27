@@ -40,6 +40,7 @@ Use cases
 --------------
 
 SQL418 allow to write DRYer SQL request.
+In the following example, the `fetchById` and `deleteById` requests can share a common pattern:
 
 ```php
 class UserModel {
@@ -47,7 +48,7 @@ class UserModel {
     return $sql->init('SELECT * from user JOIN user_credentials ON user_credentials.id = user.id');
   }
   protected function getRequestFetchById() {
-    return $this->getRequestBase()->extend('WHERE &( AND) id=?');
+    return $this->getRequestBase()->extend('WHERE &( AND) user.id=?');
   }
   protected function getRequestDeleteById() {
     return $this->getRequestFetchById()->extend('DELETE &');
@@ -64,7 +65,8 @@ class UserModel {
 }
 ```
 
-Most of all, when you wrap your SQL requests with SQL418, you can easily extends your own application.
+Most of all, it allows you can to extends your own application.
+In the following example, we extend the `UserModel` to do a soft delete:
 
 ```php
 class UserModelSoftDelete extends UserModel {
@@ -72,7 +74,7 @@ class UserModelSoftDelete extends UserModel {
     return parent::getRequestBase()->extend('WHERE user.deleted = 0');
   }
   protected function getRequestDeleteById() {
-    return $this->getRequestFetchById()->extend('UPDATE & SET deleted = 1');
+    return $this->getRequestFetchById()->extend('UPDATE & SET user.deleted = 1');
   }
 }
 ```
