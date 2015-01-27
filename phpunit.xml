@@ -3,4 +3,7 @@
     <testsuite name="SQL418">
         <directory>./test/</directory>
     </testsuite>
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+    </logging>
 </phpunit>
