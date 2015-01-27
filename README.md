@@ -8,7 +8,7 @@ SQL418
 [![License](https://poser.pugx.org/baddum/sql418/license.svg)](http://opensource.org/licenses/MIT)
 
 
-SQL418 is a PHP library that allow you to modify a SQL requests.
+`SQL418` is a PHP library that allows you to modify a SQL requests by extending it.
 
 
 
@@ -39,8 +39,8 @@ echo $sql->output();
 Use cases
 --------------
 
-SQL418 allow to write DRYer SQL request.
-In the following example, the `fetchById` and `deleteById` requests can share a common pattern:
+`SQL418` allows to write DRYer SQL requests.
+In the following example, the `fetchById` and `deleteById` requests share a common pattern:
 
 ```php
 class UserModel {
