@@ -6,7 +6,7 @@ use Baddum\SQL418\Tokenizer;
 
 class TokenizerTest extends \PHPUnit_Framework_TestCase
 {
-    
+
     /**
      * @dataProvider providerSQLToken
      */
@@ -18,12 +18,12 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
             $statement[] = $value;
         }
         $statement = implode(' ', $statement);
-        
+
         $actualTokenMap = (new Tokenizer)
             ->from($statement)
             ->with(array('SELECT', 'FROM', 'WHERE', 'GROUP BY', 'HAVING', 'ORDER BY', 'LIMIT'))
             ->tokenize();
-        
+
         foreach ($expectedTokenMap as $keyword => $value) {
             $this->assertEquals($value, $actualTokenMap[$keyword]);
         }
@@ -34,14 +34,23 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [
-                    'SELECT' => 'table.coumn',
+                    'SELECT' => 'table.column',
+                    'FROM' => 'table',
+                    'WHERE' => 'table.id = 3',
+                    'ORDER BY' => 'table.name',
+                    'LIMIT' => '2'
+                ]
+            ],
+            [
+                [
+                    'SELECT' => 'table.column',
                     'FROM' => 'table',
                     'WHERE' => 'table.id = " SELECT * FROM myTable WHERE id=3 "'
                 ]
             ],
             [
                 [
-                    'SELECT' => 'table.coumn',
+                    'SELECT' => 'table.column',
                     'FROM' => 'table',
                     'WHERE' => 'table.id = "SELECT * FROM myTable WHERE thing=\" SELECT \" LIMIT 3"',
                     'LIMIT' => 1
