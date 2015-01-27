@@ -46,8 +46,11 @@ class Tokenizer
                         $this->currentKeyword = $keyword;
                         continue 2;
                     }
-                    $keyword = strtoupper(array_pop($buffer)) . ' ' . $keyword;
-                } while (! empty($buffer));
+                    $continue = ! empty($buffer);
+                    if ($continue) {
+                        $keyword = strtoupper(array_pop($buffer)) . ' ' . $keyword;
+                    }
+                } while ($continue);
             }
             $this->currentBuffer[] = $statementPart;
         }
@@ -61,11 +64,11 @@ class Tokenizer
      *************************************************************************/
     protected function clearBuffer()
     {
-        if (!empty($this->currentBuffer)) {
+        if ($this->currentKeyword) {
             $this->tokenMap[$this->currentKeyword] = implode(' ', $this->currentBuffer);
             $this->currentBuffer = [];
+            $this->currentKeyword = null;
         }
-        $this->currentKeyword = null;
     }
 
     protected function hasBufferUnterminatedQuote()

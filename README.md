@@ -55,7 +55,7 @@ class UserModel {
     return $this->getRequestBase()->extend('WHERE &( AND) user.id=?');
   }
   protected function getRequestDeleteById() {
-    return $this->getRequestFetchById()->extend('DELETE &');
+    return $this->getRequestFetchById()->extend('DELETE');
   }
 }
 ```

@@ -43,7 +43,11 @@ class Request
             $keyword = $this->keywordAliasMap[$keyword];
         }
         $old = $this->get($keyword);
-        $value = $this->replaceEscapedTag($value, '&', $old);
+        if (!empty($value)) {
+            $value = $this->replaceEscapedTag($value, '&', $old);
+        } else {
+            $value = $old;
+        }
         $this->tokenMap[$keyword] = $value;
         return false;
     }
@@ -94,7 +98,7 @@ class Request
     protected function extractType($statement)
     {
         foreach (array_keys($this->keywordMap) as $type) {
-            if (substr($statement, 0, strlen($type) + 1) == $type . ' ') {
+            if (substr($statement, 0, strlen($type)) == $type) {
                 return $type;
             }
         }

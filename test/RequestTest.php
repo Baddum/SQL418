@@ -36,6 +36,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('UPDATE table SET name="coco" WHERE id = 3;', $sql->output());
         $sql->extend('INSERT INTO &');
         $this->assertEquals('INSERT INTO table SET name="coco";', $sql->output());
+        $sql->extend('SELECT');
+        $this->assertEquals('SELECT table.column FROM table WHERE id = 3;', $sql->output());
     }
 
     public function testConditionalExtend()
