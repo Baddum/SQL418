@@ -10,8 +10,17 @@ class Request
      *************************************************************************/
     protected $type;
     protected $tokenMap = array();
+    protected $keywordAliasMap = [
+        'FROM' => 'TABLE',
+        'UPDATE' => 'TABLE',
+        'INSERT INTO' => 'TABLE',
+        'DELETE' => 'TABLE',
+    ];
     protected $keywordMap = array(
         'SELECT' => ['SELECT', 'FROM', 'WHERE', 'GROUP BY', 'HAVING', 'ORDER BY', 'LIMIT'],
+        'UPDATE' => ['UPDATE', 'SET', 'WHERE', 'ORDER BY', 'LIMIT'],
+        'INSERT' => ['INSERT INTO', 'SET', 'VALUES'],
+        'DELETE' => ['DELETE', 'WHERE', 'ORDER BY', 'LIMIT'],
     );
 
 
@@ -19,14 +28,20 @@ class Request
      *************************************************************************/
     public function get($keyword)
     {
+        if (isset($this->keywordAliasMap[$keyword])) {
+            $keyword = $this->keywordAliasMap[$keyword];
+        }
         if (isset($this->tokenMap[$keyword])) {
             return $this->tokenMap[$keyword];
         }
         return false;
     }
-    
+
     public function set($keyword, $value)
     {
+        if (isset($this->keywordAliasMap[$keyword])) {
+            $keyword = $this->keywordAliasMap[$keyword];
+        }
         $old = $this->get($keyword);
         $value = $this->replaceEscapedTag($value, '&', $old);
         $this->tokenMap[$keyword] = $value;
@@ -59,16 +74,18 @@ class Request
 
     public function output()
     {
-        $statement = ' ';
+        $statementPartList = [];
         if (!isset($this->keywordMap[$this->type])) {
             throw new \RuntimeException('Try to output an unknown SQL request type: ' . $this->type);
         }
         foreach ($this->keywordMap[$this->type] as $keyword) {
-            if (isset($this->tokenMap[$keyword])) {
-                $statement .= ' ' . $keyword . ' ' . $this->tokenMap[$keyword];
+            $value = $this->get($keyword);
+            if ($value !== false) {
+                $statementPartList[] = $keyword;
+                $statementPartList[] = $value;
             }
         }
-        return trim($statement) . ';';
+        return trim(implode(' ', $statementPartList)) . ';';
     }
 
 
@@ -97,12 +114,12 @@ class Request
     {
         $subjectPartList = explode('\\\\', $subject);
         foreach ($subjectPartList as $key => $subjectPart) {
-            $subSubjectPartList = explode('\\'.$search, $subjectPart);
+            $subSubjectPartList = explode('\\' . $search, $subjectPart);
             foreach ($subSubjectPartList as $subKey => $subSubjectPart) {
                 $subSubjectPartList[$subKey] = str_replace($search, $replace, $subSubjectPart);
             }
             $subjectPartList[$key] = implode($search, $subSubjectPartList);
         }
-        return implode('\\'.$search, $subjectPartList);
+        return implode('\\' . $search, $subjectPartList);
     }
 }
