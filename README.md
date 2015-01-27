@@ -8,7 +8,7 @@ SQL418
 [![License](https://poser.pugx.org/baddum/sql418/license.svg)](http://opensource.org/licenses/MIT)
 
 
-SQL418 is a PHP library that allow you to extend the SQL requests.
+SQL418 is a PHP library that allow you to modify a SQL requests.
 
 
 
@@ -16,16 +16,65 @@ Let's code
 --------------
 
 ```php
-use Baddum\SQL418\Request;
-$sql = (new Request)->init('SELECT * from table ');
-echo $sql->output().PHP_EOL;
+$sql = (new Baddum\SQL418\Request);
+$sql->init('SELECT * from table');
+echo $sql->output();
 // SELECT * FROM table;
+
 $sql->extend('WHERE table.id = 39');
-echo $sql->output().PHP_EOL;
+echo $sql->output();
 // SELECT * FROM table WHERE table.id = 39;
-$sql->extend('SELECT table.name');
-echo $sql->output().PHP_EOL;
-// SELECT table.name FROM table WHERE table.id = 39;
+
+$sql->extend('SELECT table.column');
+echo $sql->output();
+// SELECT table.column FROM table WHERE table.id = 39;
+
+$sql->extend('UPDATE & SET table.column = "coco"');
+echo $sql->output();
+// UPDATE table SET table.column = "coco" WHERE table.id = 39;
+```
+
+
+
+Use cases
+--------------
+
+SQL418 allow to write DRYer SQL request.
+
+```php
+class UserModel {
+  protected function getRequestBase() {
+    return $sql->init('SELECT * from user JOIN user_credentials ON user_credentials.id = user.id');
+  }
+  protected function getRequestFetchById() {
+    return $this->getRequestBase()->extend('WHERE &( AND) id=?');
+  }
+  protected function getRequestDeleteById() {
+    return $this->getRequestFetchById()->extend('DELETE &');
+  }
+  
+  public function fetchById($id) {
+    $request = $this->getRequestFetchById();
+    // ...
+  }
+  public function deleteById($id) {
+    $request = $this->getRequestDeleteById();
+    // ...
+  }
+}
+```
+
+Most of all, when you wrap your SQL requests with SQL418, you can easily extends your own application.
+
+```php
+class UserModelSoftDelete extends UserModel {
+  protected function getRequestBase() {
+    return parent::getRequestBase()->extend('WHERE user.deleted = 0');
+  }
+  protected function getRequestDeleteById() {
+    return $this->getRequestFetchById()->extend('UPDATE & SET deleted = 1');
+  }
+}
 ```
 
 
