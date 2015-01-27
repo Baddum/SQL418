@@ -37,4 +37,13 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $sql->extend('INSERT INTO &');
         $this->assertEquals('INSERT INTO table SET name="coco";', $sql->output());
     }
+
+    public function testConditionalExtend()
+    {
+        $sql = (new Request)->init('SELECT * from table');
+        $sql->extend('WHERE &( AND) firstname="Albert"');
+        $this->assertEquals('SELECT * FROM table WHERE firstname="Albert";', $sql->output());
+        $sql->extend('WHERE &( AND) lastname="Einstein"');
+        $this->assertEquals('SELECT * FROM table WHERE firstname="Albert" AND lastname="Einstein";', $sql->output());
+    }
 }

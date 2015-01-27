@@ -116,7 +116,11 @@ class Request
         foreach ($subjectPartList as $key => $subjectPart) {
             $subSubjectPartList = explode('\\' . $search, $subjectPart);
             foreach ($subSubjectPartList as $subKey => $subSubjectPart) {
-                $subSubjectPartList[$subKey] = str_replace($search, $replace, $subSubjectPart);
+                if (!empty($replace)) {
+                    $replace .= '${2}';
+                }
+                $subSubjectPart = preg_replace('/&(\(([^)]*)\)|)/i', $replace, $subSubjectPart);
+                $subSubjectPartList[$subKey] = trim($subSubjectPart);
             }
             $subjectPartList[$key] = implode($search, $subSubjectPartList);
         }
