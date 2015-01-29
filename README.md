@@ -104,7 +104,7 @@ This library package requires `PHP 5.4` or later.<br>
 Install [Composer](http://getcomposer.org/doc/01-basic-usage.md#installation) and run the following command to get the latest version:
 
 ```sh
-composer require baddum/sql418:~1.1
+composer require baddum/sql418:~1.2
 ```
 
 

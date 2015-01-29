@@ -1,6 +1,12 @@
 CHANGELOG
 ==============
 
+1.2:
+--------------
+  
+  * Add a `remove()` method & a '/' keyword to remove a token.
+
+
 1.1.1:
 --------------
   
