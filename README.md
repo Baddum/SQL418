@@ -26,9 +26,6 @@ An example to add a `WHERE` clause to a `SELECT` request:
 
 ```php
 $request = new Baddum\SQL418\Request('SELECT * from table');
-echo $request;
-// SELECT * FROM table;
-
 echo $request->extend('WHERE id = 39');
 // SELECT * FROM table WHERE id = 39;
 ```
@@ -49,7 +46,7 @@ echo $request->extend('SELECT &, id');
 // SELECT name, id FROM table WHERE id = 39;
 ```
 
-You can change the type of request.<br>
+You can change the type of a request.<br>
 An example to change a `SELECT` request to a `DELETE` one:
 
 ```php
