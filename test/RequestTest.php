@@ -48,4 +48,13 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $sql->extend('WHERE &( AND) lastname="Einstein"');
         $this->assertEquals('SELECT * FROM table WHERE firstname="Albert" AND lastname="Einstein";', $sql->output());
     }
+
+    public function testReset()
+    {
+        $sql = (new Request)->init('SELECT * FROM table WHERE firstname="Albert" ORDER BY firstname');
+        $sql->extend('ORDER BY /');
+        $this->assertEquals('SELECT * FROM table WHERE firstname="Albert";', $sql->output());
+        $sql->remove('WHERE');
+        $this->assertEquals('SELECT * FROM table;', $sql->output());
+    }
 }

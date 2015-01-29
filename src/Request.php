@@ -28,9 +28,7 @@ class Request
      *************************************************************************/
     public function get($keyword)
     {
-        if (isset($this->keywordAliasMap[$keyword])) {
-            $keyword = $this->keywordAliasMap[$keyword];
-        }
+        $keyword = $this->formatKeyword($keyword);
         if (isset($this->tokenMap[$keyword])) {
             return $this->tokenMap[$keyword];
         }
@@ -39,9 +37,11 @@ class Request
 
     public function set($keyword, $value)
     {
-        if (isset($this->keywordAliasMap[$keyword])) {
-            $keyword = $this->keywordAliasMap[$keyword];
+        if ($value == '/') {
+            $this->remove($keyword);
+            return $this;
         }
+        $keyword = $this->formatKeyword($keyword);
         $old = $this->get($keyword);
         if (!empty($value)) {
             $value = $this->replaceEscapedTag($value, '&', $old);
@@ -49,7 +49,14 @@ class Request
             $value = $old;
         }
         $this->tokenMap[$keyword] = $value;
-        return false;
+        return $this;
+    }
+
+    public function remove($keyword)
+    {
+        $keyword = $this->formatKeyword($keyword);
+        unset($this->tokenMap[$keyword]);
+        return $this;
     }
 
 
@@ -105,6 +112,15 @@ class Request
 
     /* PROTECTED METHODS
      *************************************************************************/
+    protected function formatKeyword($keyword)
+    {
+        $keyword = strtoupper($keyword);
+        if (isset($this->keywordAliasMap[$keyword])) {
+            $keyword = $this->keywordAliasMap[$keyword];
+        }
+        return $keyword;
+    }
+    
     protected function extractType($statement)
     {
         foreach (array_keys($this->keywordMap) as $type) {
