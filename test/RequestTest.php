@@ -32,7 +32,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testTypeChange()
     {
         $sql = (new Request)->init('SELECT table.column from table WHERE id = 3');
-        $sql->extend('UPDATE & SET name="coco"');
+        $sql->extend('UPDATE SET name="coco"');
         $this->assertEquals('UPDATE table SET name="coco" WHERE id = 3;', $sql->output());
         $sql->extend('INSERT INTO &');
         $this->assertEquals('INSERT INTO table SET name="coco";', $sql->output());

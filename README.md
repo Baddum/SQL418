@@ -10,36 +10,63 @@ SQL418
 
 `SQL418` is a PHP library that allows you to modify a SQL requests by extending it.
 
-1. [Let's code](#lets-code)
-2. [How to Install](#how-to-install)
-3. [How to Contribute](#how-to-contribute)
-4. [Author & Community](#author--community)
+1. [Features](#features)
+2. [Use case](#use-cases)
+3. [How to Install](#how-to-install)
+4. [How to Contribute](#how-to-contribute)
+5. [Author & Community](#author--community)
 
 
 
-Let's code
+Features
 --------------
 
-### Basics 
+Use the `extend()` method to complete a SQL request.
+For example, you can add a `WHERE` clause to a `SELECT` request:
 
 ```php
-$sql = new Baddum\SQL418\Request('SELECT * from table');
-echo $sql;
+$request = new Baddum\SQL418\Request('SELECT * from table');
+echo $request;
 // SELECT * FROM table;
 
-$sql->extend('WHERE table.id = 39');
-echo $sql;
-// SELECT * FROM table WHERE table.id = 39;
-
-$sql->extend('SELECT table.column');
-echo $sql;
-// SELECT table.column FROM table WHERE table.id = 39;
-
-$sql->extend('UPDATE & SET table.column = "coco"');
-echo $sql;
-// UPDATE table SET table.column = "coco" WHERE table.id = 39;
+echo $request->extend('WHERE id = 39');
+// SELECT * FROM table WHERE id = 39;
 ```
 
+You can override a defined part of a SQL request, like changing the selected fields:
+
+```php
+echo $request->extend('SELECT name');
+// SELECT name FROM table WHERE id = 39;
+```
+
+Use the `&` keyword to extend a part of a SQL request.
+For example, you can add a field to select:
+
+```php
+echo $request->extend('SELECT &, id');
+// SELECT name, id FROM table WHERE id = 39;
+```
+
+You can change the type a SQL request, like changing a `SELECT` request to a `DELETE` one:
+
+```php
+echo $request->extend('DELETE');
+// DELETE table WHERE id = 39;
+```
+
+You can also use all the features together:
+
+```php
+$sql->extend('UPDATE SET name = "Albert" WHERE & AND right <> admin"');
+echo $sql;
+// UPDATE table SET name = "Albert" WHERE id = 39 AND right <> admin;
+```
+
+
+
+Use cases
+--------------
 
 ### Use case: DRYer requests 
 
@@ -47,12 +74,11 @@ In the following example, the `fetchById` and `deleteById` requests share a comm
 
 ```php
 class UserModel {
-  protected function getRequestFetchById() {
-    return 'SELECT * from user WHERE user.id=?';
-  }
-  protected function getRequestDeleteById() {
-    return new Request($this->getRequestFetchById())
-      ->extend('DELETE');
+  protected $SQLFetchById = 'SELECT * from user WHERE user.id=?';
+  protected $SQLDeleteById = '';
+  public function __construct() {
+    $request = new Request($this->SQLFetchById);
+    $this->SQLDeleteById = $request->extend('DELETE');
   }
 }
 ```
@@ -62,13 +88,10 @@ In the following example, we extend the `UserModel` to do a soft delete:
 
 ```php
 class UserModelSoftDelete extends UserModel {
-  protected function getRequestFetchById() {
-    return new Request(parent::getRequestFetchById())
-      ->extend('WHERE & AND user.deleted = 0');
-  }
-  protected function getRequestDeleteById() {
-    return new Request($this->getRequestFetchById())
-      ->extend('UPDATE & SET user.deleted = 1');
+  public function __construct() {
+    $request = new Request($this->SQLFetchById);
+    $this->SQLFetchById = $request->extend('WHERE & AND user.deleted = 0');
+    $this->SQLDeleteById = $request->extend('UPDATE & SET user.deleted = 1');
   }
 }
 ```
