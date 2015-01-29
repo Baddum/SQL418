@@ -21,7 +21,7 @@ SQL418
 Features
 --------------
 
-Use the `extend()` method to complete a SQL request.<br>
+Use the `extend()` method to complete a request.<br>
 An example to add a `WHERE` clause to a `SELECT` request:
 
 ```php
@@ -33,7 +33,7 @@ echo $request->extend('WHERE id = 39');
 // SELECT * FROM table WHERE id = 39;
 ```
 
-You can override a defined part of a SQL request.<br>
+You can override a defined part of a request.<br>
 An example to change the selected fields:
 
 ```php
@@ -41,7 +41,7 @@ echo $request->extend('SELECT name');
 // SELECT name FROM table WHERE id = 39;
 ```
 
-Use the `&` keyword to extend a part of a SQL request.<br>
+Use the `&` keyword to extend a part of a request.<br>
 An example to  add a field to select:
 
 ```php
@@ -49,7 +49,7 @@ echo $request->extend('SELECT &, id');
 // SELECT name, id FROM table WHERE id = 39;
 ```
 
-You can change the type a SQL request.<br>
+You can change the type of request.<br>
 An example to change a `SELECT` request to a `DELETE` one:
 
 ```php
