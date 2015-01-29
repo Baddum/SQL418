@@ -11,7 +11,7 @@ SQL418
 `SQL418` is a PHP library that allows you to modify a SQL requests by extending it.
 
 1. [Features](#features)
-2. [Use case](#use-cases)
+2. [Use cases](#use-cases)
 3. [How to Install](#how-to-install)
 4. [How to Contribute](#how-to-contribute)
 5. [Author & Community](#author--community)
@@ -21,8 +21,8 @@ SQL418
 Features
 --------------
 
-Use the `extend()` method to complete a SQL request.
-For example, you can add a `WHERE` clause to a `SELECT` request:
+Use the `extend()` method to complete a SQL request.<br>
+An example to add a `WHERE` clause to a `SELECT` request:
 
 ```php
 $request = new Baddum\SQL418\Request('SELECT * from table');
@@ -33,22 +33,24 @@ echo $request->extend('WHERE id = 39');
 // SELECT * FROM table WHERE id = 39;
 ```
 
-You can override a defined part of a SQL request, like changing the selected fields:
+You can override a defined part of a SQL request.<br>
+An example to change the selected fields:
 
 ```php
 echo $request->extend('SELECT name');
 // SELECT name FROM table WHERE id = 39;
 ```
 
-Use the `&` keyword to extend a part of a SQL request.
-For example, you can add a field to select:
+Use the `&` keyword to extend a part of a SQL request.<br>
+An example to  add a field to select:
 
 ```php
 echo $request->extend('SELECT &, id');
 // SELECT name, id FROM table WHERE id = 39;
 ```
 
-You can change the type a SQL request, like changing a `SELECT` request to a `DELETE` one:
+You can change the type a SQL request.<br>
+An example to change a `SELECT` request to a `DELETE` one:
 
 ```php
 echo $request->extend('DELETE');
