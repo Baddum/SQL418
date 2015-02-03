@@ -51,7 +51,7 @@ An example to change a `SELECT` request to a `DELETE` one:
 
 ```php
 echo $request->extend('DELETE');
-// DELETE table WHERE id = 39;
+// DELETE FROM table WHERE id = 39;
 ```
 
 You can also use all the features together:

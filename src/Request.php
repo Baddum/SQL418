@@ -14,13 +14,13 @@ class Request
         'FROM' => 'TABLE',
         'UPDATE' => 'TABLE',
         'INSERT INTO' => 'TABLE',
-        'DELETE' => 'TABLE',
+        'DELETE FROM' => 'TABLE',
     ];
     protected $keywordMap = array(
         'SELECT' => ['SELECT', 'FROM', 'WHERE', 'GROUP BY', 'HAVING', 'ORDER BY', 'LIMIT'],
         'UPDATE' => ['UPDATE', 'SET', 'WHERE', 'ORDER BY', 'LIMIT'],
         'INSERT' => ['INSERT INTO', 'SET', 'VALUES'],
-        'DELETE' => ['DELETE', 'WHERE', 'ORDER BY', 'LIMIT'],
+        'DELETE' => ['DELETE FROM', 'WHERE', 'ORDER BY', 'LIMIT'],
     );
 
 
@@ -83,8 +83,10 @@ class Request
             $this->type = $type;
         }
         $tokenMap = $this->extractTokenMap($statement);
-        foreach ($tokenMap as $keyword => $value) {
-            $this->set($keyword, $value);
+        if (is_array($tokenMap)) {
+            foreach ($tokenMap as $keyword => $value) {
+                $this->set($keyword, $value);
+            }
         }
         return $this;
     }

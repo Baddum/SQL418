@@ -10,7 +10,7 @@ class Tokenizer
      *************************************************************************/
     protected $statement;
     protected $keywordList;
-    protected $tokenMap;
+    protected $tokenMap = [];
     protected $currentBuffer = [];
     protected $currentKeyword;
 
