@@ -135,10 +135,18 @@ class Request
 
     protected function extractTokenMap($statement)
     {
-        $tokenMap = (new Tokenizer)
+        $tokenMap = [];
+        $tokenList = (new Tokenizer)
             ->from($statement)
             ->with($this->keywordMap[$this->type])
             ->tokenize();
+        foreach($tokenList as $token) {
+            list($keyword, $value) = $token;
+            if (isset($tokenMap[$keyword])) {
+                throw new \RuntimeException('Invalid SQL request with several tokens of type: '.$keyword);
+            }
+            $tokenMap[$keyword] = $value;
+        }
         return $tokenMap;
     }
 

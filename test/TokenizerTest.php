@@ -20,13 +20,13 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
         }
         $statement = implode(' ', $statement);
 
-        $actualTokenMap = (new Tokenizer)
+        $actualTokenList = (new Tokenizer)
             ->from($statement)
             ->with(array('SELECT', 'FROM', 'WHERE', 'GROUP BY', 'HAVING', 'ORDER BY', 'LIMIT'))
             ->tokenize();
 
         foreach ($expectedTokenList as $keyword => $value) {
-            $this->assertEquals($value, $actualTokenMap[$keyword]);
+            $this->assertEquals($value, $actualTokenList[$keyword]);
         }
     }
 
