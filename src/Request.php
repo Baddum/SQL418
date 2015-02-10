@@ -62,12 +62,13 @@ class Request
 
     /* PUBLIC METHODS
      *************************************************************************/
-    public function __construct($statement = null) {
+    public function __construct($statement = null)
+    {
         if (!is_null($statement)) {
             $this->init($statement);
         }
     }
-    
+
     public function init($statement)
     {
         $this->type;
@@ -90,8 +91,9 @@ class Request
         }
         return $this;
     }
-    
-    public function __toString() {
+
+    public function __toString()
+    {
         return $this->output();
     }
 
@@ -122,7 +124,7 @@ class Request
         }
         return $keyword;
     }
-    
+
     protected function extractType($statement)
     {
         foreach (array_keys($this->keywordMap) as $type) {
@@ -140,10 +142,10 @@ class Request
             ->from($statement)
             ->with($this->keywordMap[$this->type])
             ->tokenize();
-        foreach($tokenList as $token) {
+        foreach ($tokenList as $token) {
             list($keyword, $value) = $token;
             if (isset($tokenMap[$keyword])) {
-                throw new \RuntimeException('Invalid SQL request with several tokens of type: '.$keyword);
+                throw new \RuntimeException('Invalid SQL request with several tokens of type: ' . $keyword);
             }
             $tokenMap[$keyword] = $value;
         }

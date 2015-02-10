@@ -25,8 +25,8 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
             ->with(array('SELECT', 'FROM', 'WHERE', 'GROUP BY', 'HAVING', 'ORDER BY', 'LIMIT'))
             ->tokenize();
 
-        foreach ($expectedTokenList as $keyword => $value) {
-            $this->assertEquals($value, $actualTokenList[$keyword]);
+        foreach ($expectedTokenList as $index => $token) {
+            $this->assertEquals($token, $actualTokenList[$index]);
         }
     }
 
@@ -46,7 +46,7 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
                 [
                     ['SELECT', 'table.column'],
                     ['FROM', 'table'],
-                    ['WHERE' ,'table.id = " SELECT * FROM myTable WHERE id=3 "']
+                    ['WHERE', 'table.id = " SELECT * FROM myTable WHERE id=3 "']
                 ]
             ],
             [
@@ -82,5 +82,16 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
+    }
+
+    public function testListToken()
+    {
+        $statement = 't1 , t5 LEFT JOIN (t2, t3, t4) ON (t2.a=t1.a AND t3.b=t1.b AND t4.c=t1.c)';
+        $actualTokenList = (new Tokenizer)
+            ->from($statement)
+            ->with(',')
+            ->tokenize();
+        
+        $this->assertEquals(2, count($actualTokenList));
     }
 }

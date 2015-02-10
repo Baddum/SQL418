@@ -25,6 +25,9 @@ class Tokenizer
 
     public function with($keywordList)
     {
+        if (!is_array($keywordList)) {
+            $keywordList = array($keywordList);
+        }
         $this->keywordList = $keywordList;
         return $this;
     }
@@ -46,7 +49,7 @@ class Tokenizer
                         $this->currentKeyword = $keyword;
                         continue 2;
                     }
-                    $continue = ! empty($buffer);
+                    $continue = !empty($buffer);
                     if ($continue) {
                         $keyword = strtoupper(array_pop($buffer)) . ' ' . $keyword;
                     }
@@ -64,7 +67,7 @@ class Tokenizer
      *************************************************************************/
     protected function clearBuffer()
     {
-        if ($this->currentKeyword) {
+        if ($this->currentKeyword || $this->currentBuffer) {
             $this->tokenMap[] = [$this->currentKeyword, implode(' ', $this->currentBuffer)];
             $this->currentBuffer = [];
             $this->currentKeyword = null;
