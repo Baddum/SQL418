@@ -65,7 +65,7 @@ class Tokenizer
     protected function clearBuffer()
     {
         if ($this->currentKeyword) {
-            $this->tokenMap[$this->currentKeyword] = implode(' ', $this->currentBuffer);
+            $this->tokenMap[] = [$this->currentKeyword, implode(' ', $this->currentBuffer)];
             $this->currentBuffer = [];
             $this->currentKeyword = null;
         }
