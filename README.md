@@ -8,7 +8,9 @@ SQL418
 [![License](https://poser.pugx.org/baddum/sql418/license.svg)](http://opensource.org/licenses/MIT)
 
 
-`SQL418` is a PHP library that allows you to modify a SQL requests by extending it.
+`SQL418` is a small PHP library for extensible SQL requests.
+
+This library allows you to modify an existing SQL statement, by overriding some parts of it.
 
 1. [Features](#features)
 2. [Use cases](#use-cases)

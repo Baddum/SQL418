@@ -1,7 +1,7 @@
 {
     "name": "baddum/sql418",
     "type": "library",
-    "description": "A library to extend SQL requests",
+    "description": "A library for extensible SQL requests",
     "keywords": ["sql", "pdo"],
     "license": "MIT",
     "homepage": "https://github.com/Baddum/SQL418",
